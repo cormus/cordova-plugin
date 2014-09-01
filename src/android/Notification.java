@@ -74,11 +74,11 @@ public class Notification extends CordovaPlugin {
     	
 		
         if (action.equals("listOptions")) {
-            this.listOptions(args.getString(0), args.getString(1), callbackContext);
+            this.listOptions(args.getString(0), args.getString(1), args.getString(2), callbackContext);
             return true;
         }
-		else if (action.equals("checklist")) {
-            this.checklist(args.getString(0), args.getString(1), args.getString(2), callbackContext);
+        else if (action.equals("checklist")) {
+            this.checklist(args.getString(0), args.getString(1), args.getString(2),  args.getString(3),callbackContext);
             return true;
         }
         else if (action.equals("beep")) {
@@ -130,7 +130,7 @@ public class Notification extends CordovaPlugin {
      *
      * @param count     Number of times to play notification
      */
-	public synchronized void listOptions(final String title, final String thelist, final CallbackContext callbackContext) {
+	public synchronized void listOptions(final String title, final String thelist, final String buttonCancelLabels,final CallbackContext callbackContext) {
     
     	final CordovaInterface cordova = this.cordova;
 
@@ -158,6 +158,27 @@ public class Notification extends CordovaPlugin {
                         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, item + 1));
 		    	    }
 		    	});
+                
+                
+                if(buttonCancelLabels.length() > 0)
+                {
+                    //botão para cancelar
+                    dlg.setNegativeButton(buttonCancelLabels,
+                        new AlertDialog.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+                            }
+                    });
+                }
+                
+                 //fica escutando se o usuário aperta o botão de voltar do android
+                dlg.setOnCancelListener(new AlertDialog.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog){
+                        dialog.dismiss();
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+                    }
+                });
 
                 dlg.create();
                 dlg.show();
@@ -166,13 +187,14 @@ public class Notification extends CordovaPlugin {
         };
         this.cordova.getActivity().runOnUiThread(runnable);
     }
-	
+    
+    
 	/**
      * Função para mostrar um modal de opções para o usuário selecionar uma opção
      *
      * @param count     Number of times to play notification
      */
-	public synchronized void checklist(final String title, final String thelist, final String listSelectedString, final CallbackContext callbackContext) {
+	public synchronized void checklist(final String title, final String thelist, final String listSelectedString, final String buttonCancelLabels, final CallbackContext callbackContext) {
     
     	final CordovaInterface cordova = this.cordova;
 
@@ -229,6 +251,26 @@ public class Notification extends CordovaPlugin {
                                 
                                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, texto));
                         }
+                });
+                
+               if(buttonCancelLabels.length() > 0)
+                {
+                    //botão para cancelar
+                    dlg.setNegativeButton(buttonCancelLabels,
+                        new AlertDialog.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+                            }
+                    });
+                }
+                
+                //fica escutando se o usuário aperta o botão de voltar do android
+                dlg.setOnCancelListener(new AlertDialog.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog){
+                        dialog.dismiss();
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+                    }
                 });
                 
                 dlg.create();

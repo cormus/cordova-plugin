@@ -36,8 +36,9 @@ module.exports = {
      * @param {String} list          Lista de opções
 	 * @param {Function} completeCallback   The callback that is called when user clicks on a button.
      */
-	listOptions: function(title, list, completeCallback) {
-        exec(completeCallback, null, "Notification", "listOptions", [title, list]);
+	listOptions: function(title, list, completeCallback, buttonCancelLabels) {
+        var _buttonCancelLabels = (buttonCancelLabels || "");
+        exec(completeCallback, null, "Notification", "listOptions", [title, list, _buttonCancelLabels]);
     },
     /**
      * Abre um modal com uma lista de opções para o usuário selecionar.
@@ -47,9 +48,10 @@ module.exports = {
      * @param {String} list          Lista de opções
 	 * @param {Function} completeCallback   The callback that is called when user clicks on a button.
      */
-	checklist: function(title, list, completeCallback, listSelected) {
+	checklist: function(title, list, completeCallback, listSelected, buttonCancelLabels) {
         var _listSelected = (listSelected || "[]");
-        exec(completeCallback, null, "Notification", "checklist", [title, list, _listSelected]);
+        var _buttonCancelLabels = (buttonCancelLabels || "");
+        exec(completeCallback, null, "Notification", "checklist", [title, list, _listSelected, _buttonCancelLabels]);
     },
     /**
      * Open a native alert dialog, with a customizable title and button text.

@@ -3,32 +3,48 @@
 Plugin documentation: [doc/index.md](doc/index.md)
 
 ```
-		function clickAlert(){
-					
-			var lista = ['alex', 'aline', 'ana', 'vitória', 'João', 'Carlos', 'Saulo', 'Pedro', 'Jessica'];
-					
-			navigator.notification.alex(
-				'Selecione um usuário!',
-				lista,
-				function(i)
+	function listOptions(){
+                
+		var lista = ['alex', 'aline', 'ana', 'vitória', 'João', 'Carlos', 'Saulo', 'Pedro', 'Jessica'];
+		
+		navigator.notification.listOptions(
+			'Seleciona um usuário:',
+			lista,
+			function(i)
+			{
+				if(i)
 				{
 					alert(lista[i - 1]);
 				}
-			);
-		}
+				else
+				{
+					alert('Cancelou');
+				}
+			},
+			'Cancelar'
+		);
+	}
+
+	function checklist(){
 		
-		 function checklist(){
-			
-			var lista = ['alex', 'aline', 'ana', 'vitória', 'João', 'Carlos', 'Saulo', 'Pedro', 'Jessica'];
-			
-			navigator.notification.checklist(
-				'Seleciona um usuário:',
-				lista,
-				function(i)
+		var lista = ['alex', 'aline', 'ana', 'vitória', 'João', 'Carlos', 'Saulo', 'Pedro', 'Jessica'];
+		
+		navigator.notification.checklist(
+			'Seleciona um usuário:',
+			lista,
+			function(i)
+			{
+				if(i)
 				{
 					alert(i);
-				},
-				[1]
-			);
-		}
+				}
+				else
+				{
+					alert('Cancelou');
+				}
+			},
+			[1],
+			'Cancelar'
+		);
+	}
 ```
