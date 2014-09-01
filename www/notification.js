@@ -43,7 +43,7 @@ module.exports = {
     },
 	alex: function(title, list, completeCallback) {
         exec(completeCallback, null, "Notification", "alex", [title, list]);
-    }
+    },
     /**
      * Open a native confirm dialog, with a customizable title and button text.
      * The result that the user selects is returned to the result callback.
