@@ -16,4 +16,19 @@ Plugin documentation: [doc/index.md](doc/index.md)
 				}
 			);
 		}
+		
+		 function checklist(){
+			
+			var lista = ['alex', 'aline', 'ana', 'vitória', 'João', 'Carlos', 'Saulo', 'Pedro', 'Jessica'];
+			
+			navigator.notification.checklist(
+				'Seleciona um usuário:',
+				lista,
+				function(i)
+				{
+					alert(i);
+				},
+				[1]
+			);
+		}
 ```

@@ -77,7 +77,11 @@ public class Notification extends CordovaPlugin {
             this.listOptions(args.getString(0), args.getString(1), callbackContext);
             return true;
         }
-        if (action.equals("beep")) {
+		else if (action.equals("checklist")) {
+            this.checklist(args.getString(0), args.getString(1), args.getString(2), callbackContext);
+            return true;
+        }
+        else if (action.equals("beep")) {
             this.beep(args.getLong(0));
         }
         else if (action.equals("alert")) {
@@ -155,6 +159,78 @@ public class Notification extends CordovaPlugin {
 		    	    }
 		    	});
 
+                dlg.create();
+                dlg.show();
+                
+            };
+        };
+        this.cordova.getActivity().runOnUiThread(runnable);
+    }
+	
+	/**
+     * Função para mostrar um modal de opções para o usuário selecionar uma opção
+     *
+     * @param count     Number of times to play notification
+     */
+	public synchronized void checklist(final String title, final String thelist, final String listSelectedString, final CallbackContext callbackContext) {
+    
+    	final CordovaInterface cordova = this.cordova;
+
+        Runnable runnable = new Runnable() {
+            public void run() {
+                
+                String[] options = thelist.replace("[", "").replace("]", "").replace("\"", "").split(",");
+                List<String> list = new ArrayList<String>();   
+                for( int x = 0; x < options.length; x++) 
+                {
+                    list.add(options[x]);
+		    	}
+                CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+                
+                
+                final boolean[] checados = new boolean[items.length]; 
+                
+                String[] listSelectedOptions = listSelectedString.replace("[", "").replace("]", "").replace("\"", "").split(",");
+                for( int x = 0; x < listSelectedOptions.length; x++) 
+                {
+                    if(listSelectedOptions[x].equals("1"))
+                    {
+                        checados[x] = true;
+                    }
+		    	}
+                
+                 
+                AlertDialog.Builder dlg = new AlertDialog.Builder(cordova.getActivity());
+                //seta o título do modal
+                dlg.setTitle(title); 
+                //permite sair do modal no btn voltar do celular
+                dlg.setCancelable(true);
+                
+                dlg.setMultiChoiceItems(items, checados, new DialogInterface.OnMultiChoiceClickListener() { 
+                    public void onClick(DialogInterface arg0, int arg1, boolean arg2) { 
+                        checados[arg1] = arg2; 
+                    } 
+                }); 
+                
+                dlg.setPositiveButton("Confirmar",
+                        new AlertDialog.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                dialog.dismiss();
+                                
+                                int quat = checados.length;
+                                String texto = "[";
+                                for (int i = 0; i < quat; i++) 
+                                {
+                                    texto += (checados[i])? "1": "0";
+                                    if(i < quat - 1)
+                                        texto += ",";
+                                } 
+                                texto += "]";
+                                
+                                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, texto));
+                        }
+                });
+                
                 dlg.create();
                 dlg.show();
                 

@@ -40,6 +40,18 @@ module.exports = {
         exec(completeCallback, null, "Notification", "listOptions", [title, list]);
     },
     /**
+     * Abre um modal com uma lista de opções para o usuário selecionar.
+     *
+     * 
+     * @param {String} title         Title of the alert dialog (default: Alert)
+     * @param {String} list          Lista de opções
+	 * @param {Function} completeCallback   The callback that is called when user clicks on a button.
+     */
+	checklist: function(title, list, completeCallback, listSelected) {
+        var _listSelected = (listSelected || "[]");
+        exec(completeCallback, null, "Notification", "checklist", [title, list, _listSelected]);
+    },
+    /**
      * Open a native alert dialog, with a customizable title and button text.
      *
      * @param {String} message              Message to print in the body of the alert
