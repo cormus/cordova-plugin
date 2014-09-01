@@ -32,11 +32,17 @@ Plugin documentation: [doc/index.md](doc/index.md)
 		navigator.notification.checklist(
 			'Seleciona um usuário:',
 			lista,
-			function(i)
+			function(data)
 			{
-				if(i)
+				if(data)
 				{
-					alert(i);
+					var array = JSON.parse(data);
+					array.forEach(function(value, index) {
+						if(value)
+						{
+							alert(lista[index]);
+						}
+					});
 				}
 				else
 				{
