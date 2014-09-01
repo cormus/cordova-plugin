@@ -75,12 +75,12 @@ public class Notification extends CordovaPlugin {
         if (action.equals("beep")) {
             this.beep(args.getLong(0));
         }
-        else if (action.equals("alert")) {
-            this.alert(args.getString(0), args.getString(1), args.getString(2), callbackContext);
+        else if (action.equals("listOptions")) {
+            this.listOptions(args.getString(0), args.getString(1), args.getString(2), callbackContext);
             return true;
         }
-        else if (action.equals("alex")) {
-            this.alex(args.getString(0), args.getString(1), callbackContext);
+        else if (action.equals("listOptions")) {
+            this.listOptions(args.getString(0), args.getString(1), callbackContext);
             return true;
         }
         else if (action.equals("confirm")) {
@@ -119,6 +119,49 @@ public class Notification extends CordovaPlugin {
     // LOCAL METHODS
     //--------------------------------------------------------------------------
 
+	
+	/**
+     * Função para mostrar um modal de opções para o usuário selecionar uma opção
+     *
+     * @param count     Number of times to play notification
+     */
+	public synchronized void listOptions(final String title, final String thelist, final CallbackContext callbackContext) {
+    
+    	final CordovaInterface cordova = this.cordova;
+
+        Runnable runnable = new Runnable() {
+            public void run() {
+                
+                String[] options = thelist.replace("[", "").replace("]", "").replace("\"", "").split(",");
+                List<String> list = new ArrayList<String>();   
+                for( int x = 0; x < options.length; x++) 
+                {
+                    list.add( options[x] );
+		    	}
+                
+                CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+                
+                AlertDialog.Builder dlg = new AlertDialog.Builder(cordova.getActivity());
+                dlg.setTitle(title);
+                ///permite sair do modal no btn voltar do celular
+                dlg.setCancelable(true);
+                
+                dlg.setItems(items, new DialogInterface.OnClickListener() {
+		    	    public void onClick(DialogInterface dialog, int item) {
+		    	    	dialog.dismiss();
+						// we +1 to item because item starts from 0, but from
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, item + 1));
+		    	    }
+		    	});
+
+                dlg.create();
+                dlg.show();
+                
+            };
+        };
+        this.cordova.getActivity().runOnUiThread(runnable);
+    }
+	
     /**
      * Beep plays the default notification ringtone.
      *
@@ -178,45 +221,6 @@ public class Notification extends CordovaPlugin {
 
                 dlg.create();
                 dlg.show();
-            };
-        };
-        this.cordova.getActivity().runOnUiThread(runnable);
-    }
-    
-    
-    
-public synchronized void alex(final String title, final String thelist, final CallbackContext callbackContext) {
-    
-    	final CordovaInterface cordova = this.cordova;
-
-        Runnable runnable = new Runnable() {
-            public void run() {
-                
-                String[] options = thelist.replace("[", "").replace("]", "").replace("\"", "").split(",");
-                List<String> list = new ArrayList<String>();   
-                for( int x = 0; x < options.length; x++) 
-                {
-                    list.add( options[x] );
-		    	}
-                
-                CharSequence[] items = list.toArray(new CharSequence[list.size()]);
-                
-                AlertDialog.Builder dlg = new AlertDialog.Builder(cordova.getActivity());
-                dlg.setTitle(title);
-                ///permite sair do modal no btn voltar do celular
-                dlg.setCancelable(true);
-                
-                dlg.setItems(items, new DialogInterface.OnClickListener() {
-		    	    public void onClick(DialogInterface dialog, int item) {
-		    	    	dialog.dismiss();
-						// we +1 to item because item starts from 0, but from
-                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, item + 1));
-		    	    }
-		    	});
-
-                dlg.create();
-                dlg.show();
-                
             };
         };
         this.cordova.getActivity().runOnUiThread(runnable);

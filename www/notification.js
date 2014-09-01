@@ -27,7 +27,18 @@ var platform = require('cordova/platform');
  */
 
 module.exports = {
-
+	
+	/**
+     * Abre um modal com uma lista de opções para o usuário selecionar.
+     *
+     * 
+     * @param {String} title         Title of the alert dialog (default: Alert)
+     * @param {String} list          Lista de opções
+	 * @param {Function} completeCallback   The callback that is called when user clicks on a button.
+     */
+	listOptions: function(title, list, completeCallback) {
+        exec(completeCallback, null, "Notification", "listOptions", [title, list]);
+    }
     /**
      * Open a native alert dialog, with a customizable title and button text.
      *
@@ -40,9 +51,6 @@ module.exports = {
         var _title = (title || "Alert");
         var _buttonLabel = (buttonLabel || "OK");
         exec(completeCallback, null, "Notification", "alert", [message, _title, _buttonLabel]);
-    },
-	alex: function(title, list, completeCallback) {
-        exec(completeCallback, null, "Notification", "alex", [title, list]);
     },
     /**
      * Open a native confirm dialog, with a customizable title and button text.
