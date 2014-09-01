@@ -38,7 +38,7 @@ module.exports = {
      */
 	listOptions: function(title, list, completeCallback) {
         exec(completeCallback, null, "Notification", "listOptions", [title, list]);
-    }
+    },
     /**
      * Open a native alert dialog, with a customizable title and button text.
      *
